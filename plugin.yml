@@ -1,0 +1,11 @@
+name: BFreeze
+version: 1.0
+author: broswen
+main: me.broswen.bfreeze.BFreeze
+description: a custom freeze tag plugin
+
+commands:
+  freezeinfo:
+    description: an info command
+  freeze:
+    description: the main command

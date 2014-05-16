@@ -1,0 +1,15 @@
+playerspawn:
+  X: -9.5
+  Y: 5.0
+  Z: 4.5
+  world: world
+taggerspawn:
+  X: -13.5
+  Y: 5.0
+  Z: 9.5
+  world: world
+lobbyspawn:
+  X: 1
+  Y: 1
+  Z: 1
+  world: world
