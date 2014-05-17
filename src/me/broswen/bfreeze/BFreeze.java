@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,8 +27,11 @@ public class BFreeze extends JavaPlugin{
 	
 	public static Boolean gameStarted, gameEnded;
 	
+	public static FileConfiguration config;
+	
 	public static int totalUnfrozen;
 	public static int totalFrozen;
+	public static int totalPlaying;
 	
 	public static ArrayList<String> players = new ArrayList<>();
 	public static ArrayList<String> unfrozen = new ArrayList<>();
@@ -55,6 +59,8 @@ public class BFreeze extends JavaPlugin{
 		playerSpawn = new Location(Bukkit.getWorld(getConfig().getString("playerspawn.world")), getConfig().getDouble("playerspawn.X"), getConfig().getDouble("playerspawn.Y"), getConfig().getDouble("playerspawn.Z"));
 		taggerSpawn = new Location(Bukkit.getWorld(getConfig().getString("taggerspawn.world")), getConfig().getDouble("taggerspawn.X"), getConfig().getDouble("taggerspawn.Y"), getConfig().getDouble("taggerspawn.Z"));
 		lobbySpawn = new Location(Bukkit.getWorld(getConfig().getString("lobbyspawn.world")), getConfig().getDouble("lobbyspawn.X"), getConfig().getDouble("lobbyspawn.Y"), getConfig().getDouble("lobbyspawn.Z"));
+		
+		config = this.getConfig();
 		
 		gameStarted = false;
 		gameEnded = false;

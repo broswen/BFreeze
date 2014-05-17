@@ -43,10 +43,15 @@ public class FreezeCommand implements CommandExecutor{
 					return true;
 				}
 				
+				if(BFreeze.totalPlaying == BFreeze.config.getInt("max-players")){
+					API.sendMessage(player, "There are already the max amount of players in that game!");
+					return true;
+				}
+				
 				API.setPlaying(player);
-				API.sendMessage(player, "You joined the game!");
 				API.broadcastToPlayers(player.getName() + " Joined The Game!");
 				API.teleportPlayer(player, BFreeze.lobbySpawn);
+				BFreeze.totalPlaying++;
 				
 				return true;
 			}
@@ -58,11 +63,18 @@ public class FreezeCommand implements CommandExecutor{
 					API.sendMessage(player, "You are not in a game!");
 					return true;
 				}
-				
-				API.removePlaying(player);
-				API.sendMessage(player, "You left the game!");
 				API.broadcastToPlayers(player.getName() + " Left The Game!");
 				API.teleportPlayer(player, BFreeze.lobbySpawn);
+				BFreeze.totalPlaying--;
+				
+				if(BFreeze.totalPlaying < BFreeze.config.getInt("min-players") && BFreeze.gameStarted){
+					GameManager.endGame();
+				}
+				
+				API.removePlaying(player);
+				API.removeFrozen(player);
+				API.removeTagging(player);
+				API.removeUnfrozen(player);
 				
 				return true;
 			}
@@ -77,6 +89,11 @@ public class FreezeCommand implements CommandExecutor{
 				
 				if(BFreeze.gameStarted){
 					API.sendMessage(player, "The game has already started!");
+					return true;
+				}
+				
+				if(BFreeze.totalPlaying < BFreeze.config.getInt("min-players")){
+					API.sendMessage(player, "There needs to be a minimum of " + BFreeze.config.getInt("min-players") + " players!");
 					return true;
 				}
 				
@@ -100,6 +117,31 @@ public class FreezeCommand implements CommandExecutor{
 				
 				GameManager.endGame();
 				
+				return true;
+			}
+			
+			if(args[0].equalsIgnoreCase("tagger")){
+				//sets the player to a tagger
+				
+				if(!API.isPlaying(player) ){
+					API.sendMessage(player, "You must be in a game to become a tagger!");
+					return true;
+				}
+				
+				if(!BFreeze.gameStarted){
+					API.sendMessage(player, "The game must be started in order for you to become a tagger!");
+					return true;
+				}
+				
+				if(API.isTagger(player)){
+					API.sendMessage(player, "You are already a tagger!");
+					return true;
+				}
+				
+				API.setTagging(player);
+				BFreeze.totalUnfrozen--;
+				API.sendMessage(player, "You are now a tagger!");
+				API.broadcastToPlayers(player.getName() + " Is Now A Tagger! RUN!!!");
 				return true;
 			}
 			

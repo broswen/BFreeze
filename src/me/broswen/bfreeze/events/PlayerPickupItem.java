@@ -13,9 +13,5 @@ public class PlayerPickupItem implements Listener{
 	@EventHandler
 	public void onPlayerPickupItem(PlayerPickupItemEvent event){
 		Player player = event.getPlayer();
-		
-		if(API.isPlaying(player) && BFreeze.gameStarted){
-			event.setCancelled(true);
-		}
 	}
 }

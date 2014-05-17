@@ -13,3 +13,7 @@ lobbyspawn:
   Y: 1
   Z: 1
   world: world
+  
+max-players: 6
+min-players: 2
+taggers: 1

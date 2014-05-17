@@ -22,6 +22,7 @@ public class FreezeInfoCommand implements CommandExecutor{
 			sender.sendMessage("gameEnded: " + BFreeze.gameEnded);
 			sender.sendMessage("totalUnfrozen: " + BFreeze.totalUnfrozen);
 			sender.sendMessage("totalFrozen: " + BFreeze.totalFrozen);
+			sender.sendMessage("totalPlaying: " + BFreeze.totalPlaying);
 			
 			if(sender instanceof Player){
 				Player player = (Player) sender;

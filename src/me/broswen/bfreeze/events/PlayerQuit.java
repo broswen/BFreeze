@@ -2,6 +2,7 @@ package me.broswen.bfreeze.events;
 
 import me.broswen.bfreeze.API;
 import me.broswen.bfreeze.BFreeze;
+import me.broswen.bfreeze.utils.GameManager;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,8 +17,19 @@ public class PlayerQuit implements Listener{
 		Player player = event.getPlayer();
 		
 		if(API.isPlaying(player)){
-			BFreeze.players.remove(API.getUUID(player));
+			API.teleportPlayer(player, BFreeze.lobbySpawn);
+			
+			API.removePlaying(player);
+			API.removeFrozen(player);
+			API.removeTagging(player);
+			API.removeUnfrozen(player);
+			
 			API.broadcastToPlayers(player.getName() + " has left the game!");
+			BFreeze.totalPlaying--;
+			
+			if(BFreeze.totalPlaying < BFreeze.config.getInt("min-players") || BFreeze.gameStarted){
+				GameManager.endGame();
+			}
 		}
 	}
 }

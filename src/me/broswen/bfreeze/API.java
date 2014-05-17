@@ -3,7 +3,9 @@ package me.broswen.bfreeze;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class API {
 
@@ -46,7 +48,7 @@ public class API {
 	public static void broadcastToPlayers(String message){
 		for(Player p : Bukkit.getOnlinePlayers()){
 			if(BFreeze.players.contains(getUUID(p))){
-				Bukkit.broadcastMessage(ChatColor.AQUA + "[" + ChatColor.DARK_AQUA + "BFreeze" + ChatColor.AQUA + "] " + ChatColor.RESET + message);
+				p.sendMessage(ChatColor.AQUA + "[" + ChatColor.DARK_AQUA + "BFreeze" + ChatColor.AQUA + "] " + ChatColor.RESET + message);
 			}
 		}
 	}
@@ -90,12 +92,20 @@ public class API {
 	}
 	
 	public static void removeFrozen(Player player){
-		BFreeze.frozen.remove(getUUID(player));
+		if(BFreeze.frozen.contains(getUUID(player))){
+			BFreeze.frozen.remove(getUUID(player));
+		}
 	}
 	
 	//sets a player to "unfrozen"
 	public static void setUnfrozen(Player player){
 		BFreeze.unfrozen.add(getUUID(player));
+	}
+	
+	public static void removeUnfrozen(Player player){
+		if(BFreeze.unfrozen.contains(getUUID(player))){
+			BFreeze.unfrozen.remove(getUUID(player));
+		}
 	}
 	
 	//sets a player to "players"
@@ -104,7 +114,9 @@ public class API {
 	}
 	
 	public static void removePlaying(Player player){
-		BFreeze.players.remove(getUUID(player));
+		if(BFreeze.players.contains(getUUID(player))){
+			BFreeze.players.remove(getUUID(player));
+		}
 	}
 	
 	//sets a player to "taggers"
@@ -113,7 +125,9 @@ public class API {
 	}
 	
 	public static void removeTagging(Player player){
-		BFreeze.taggers.remove(getUUID(player));
+		if(BFreeze.taggers.contains(getUUID(player))){
+			BFreeze.taggers.remove(getUUID(player));
+		}
 	}
 	
 	//teleports a player to a location
@@ -126,8 +140,26 @@ public class API {
 		BFreeze.frozen = null;
 		BFreeze.taggers = null;
 	}
-	
+
 	//freezes a player
-	
+	public static void freezePlayer(Player player) {
+		BFreeze.totalFrozen++;
+		BFreeze.totalUnfrozen--;
+		API.removeUnfrozen(player);
+		API.setFrozen(player);
+		player.setWalkSpeed(0);
+		player.getInventory().setHelmet(new ItemStack(Material.PACKED_ICE));
+		//player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10, 0));
+		
+	}
+
 	//unfreezes a player
+	public static void unfreeze(Player player) {
+		BFreeze.totalFrozen--;
+		BFreeze.totalUnfrozen++;
+		API.removeFrozen(player);
+		API.setUnfrozen(player);
+		player.setWalkSpeed(0.2f);
+		player.getInventory().setHelmet(new ItemStack(Material.AIR));
+	}
 }
