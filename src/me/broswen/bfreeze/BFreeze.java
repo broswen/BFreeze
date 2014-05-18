@@ -9,7 +9,11 @@ import me.broswen.bfreeze.events.BlockBreak;
 import me.broswen.bfreeze.events.BlockPlace;
 import me.broswen.bfreeze.events.EntityDamage;
 import me.broswen.bfreeze.events.EntityDamageByEntity;
+import me.broswen.bfreeze.events.HungerChange;
+import me.broswen.bfreeze.events.InventoryClick;
 import me.broswen.bfreeze.events.PlayerDropItem;
+import me.broswen.bfreeze.events.PlayerInteract;
+import me.broswen.bfreeze.events.PlayerMove;
 import me.broswen.bfreeze.events.PlayerPickupItem;
 import me.broswen.bfreeze.events.PlayerQuit;
 
@@ -22,24 +26,25 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BFreeze extends JavaPlugin{
+	public static BFreeze plugin;
 	
 	public static Location playerSpawn, taggerSpawn, lobbySpawn;
 	
-	public static Boolean gameStarted, gameEnded;
+	public static Boolean gameStarted, gameEnded, taggersStarted;
 	
 	public static FileConfiguration config;
 	
-	public static int totalUnfrozen;
-	public static int totalFrozen;
-	public static int totalPlaying;
+	public static int totalUnfrozen, totalFrozen, totalPlaying, totalTagging;
 	
 	public static ArrayList<String> players = new ArrayList<>();
 	public static ArrayList<String> unfrozen = new ArrayList<>();
 	public static ArrayList<String> frozen = new ArrayList<>();
 	public static ArrayList<String> taggers = new ArrayList<>();
+	public static ArrayList<String> ppCooldown = new ArrayList<>();
 	public static HashMap<String, Integer> points = new HashMap<>();
 	
 	public void onEnable(){
+		this.plugin = this;
 		
 		loadConfig();
 		
@@ -52,6 +57,10 @@ public class BFreeze extends JavaPlugin{
 		pm.registerEvents(new PlayerQuit(), this);
 		pm.registerEvents(new BlockBreak(), this);
 		pm.registerEvents(new BlockPlace(), this);
+		pm.registerEvents(new InventoryClick(), this);
+		pm.registerEvents(new PlayerMove(), this);
+		pm.registerEvents(new HungerChange(), this);
+		pm.registerEvents(new PlayerInteract(), this);
 		
 		this.getCommand("freeze").setExecutor(new FreezeCommand(this));
 		this.getCommand("freezeinfo").setExecutor(new FreezeInfoCommand(this));
@@ -64,8 +73,11 @@ public class BFreeze extends JavaPlugin{
 		
 		gameStarted = false;
 		gameEnded = false;
+		taggersStarted = false;
 		totalUnfrozen = 0;
 		totalFrozen = 0;
+		totalPlaying = 0;
+		totalTagging = 0;
 	}
 	
 	public void onDisable(){

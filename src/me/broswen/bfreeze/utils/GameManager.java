@@ -1,5 +1,8 @@
 package me.broswen.bfreeze.utils;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+
 import me.broswen.bfreeze.API;
 import me.broswen.bfreeze.BFreeze;
 
@@ -8,29 +11,36 @@ public class GameManager {
 	public static void startGame(){
 		
 		BFreeze.gameStarted = true;
-		SpawnHandler.teleportToArena();
-		
-		//send players to spawn if they are in lobby
-		//add to teams/ totalunfrozen
-		
 		API.broadcastToPlayers("The Game Has Started!");
+		SpawnHandler.teleportToArena();
+		BFreeze.playerSpawn.getWorld().playSound(BFreeze.playerSpawn, Sound.LEVEL_UP, 2, 1);
 	}
 	
 	public static void endGame(){
-		SpawnHandler.teleportToLobby();
+		
 		API.broadcastToPlayers("The Game Has Ended!");
+		BFreeze.playerSpawn.getWorld().playSound(BFreeze.playerSpawn, Sound.LEVEL_UP, 2, 1);
 		
-		BFreeze.gameEnded = true;
-		BFreeze.gameStarted = false;
-		BFreeze.totalFrozen = 0;
-		BFreeze.totalPlaying = 0;
-		BFreeze.totalUnfrozen = 0;
-		
-		BFreeze.players.clear();
-		BFreeze.taggers.clear();
-		BFreeze.frozen.clear();
-		BFreeze.unfrozen.clear();
+		Bukkit.getScheduler().scheduleSyncDelayedTask(BFreeze.plugin, new Runnable(){
 
-		//reset?
+			@Override
+			public void run() {
+				SpawnHandler.teleportToLobby();
+				
+				BFreeze.gameEnded = true;
+				BFreeze.gameStarted = false;
+				BFreeze.taggersStarted = false;
+				BFreeze.totalFrozen = 0;
+				BFreeze.totalPlaying = 0;
+				BFreeze.totalUnfrozen = 0;
+				BFreeze.totalTagging = 0;
+				
+				BFreeze.players.clear();
+				BFreeze.taggers.clear();
+				BFreeze.frozen.clear();
+				BFreeze.unfrozen.clear();
+			}
+			
+		}, 60L);
 	}
 }

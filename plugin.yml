@@ -9,3 +9,20 @@ commands:
     description: an info command
   freeze:
     description: the main command
+    
+permissions:
+  bfreeze.freezeinfo:
+    description: allows you to use the developer info command
+    default: false
+  bfreeze.join:
+    description: allows you to join games
+    default: true
+  bfreeze.leave:
+    description: allows you to leave games
+    default: true
+  bfreeze.start:
+    description: allows you to start games
+    default: op
+  bfreeze.stop:
+    description: allows you to stop games
+    default: op

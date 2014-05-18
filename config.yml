@@ -17,3 +17,5 @@ lobbyspawn:
 max-players: 6
 min-players: 2
 taggers: 1
+tagger-delay: 10
+power-potion-delay: 20

@@ -27,7 +27,23 @@ public class PlayerQuit implements Listener{
 			API.broadcastToPlayers(player.getName() + " has left the game!");
 			BFreeze.totalPlaying--;
 			
-			if(BFreeze.totalPlaying < BFreeze.config.getInt("min-players") || BFreeze.gameStarted){
+			if(API.isTagger(player)){
+				BFreeze.totalTagging--;
+			}
+			
+			if(API.isFrozen(player)){
+				API.unfreeze(player);
+			}
+			
+			if(API.isUnfrozen(player)){
+				BFreeze.totalUnfrozen--;
+			}
+			
+			if(BFreeze.totalTagging <= 0 && BFreeze.gameStarted){
+				GameManager.endGame();
+			}
+			
+			if(BFreeze.totalPlaying < BFreeze.config.getInt("min-players") && BFreeze.gameStarted){
 				GameManager.endGame();
 			}
 		}

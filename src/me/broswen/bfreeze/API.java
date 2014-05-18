@@ -2,13 +2,19 @@ package me.broswen.bfreeze;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class API {
 
+	static ItemStack pocketSand = new ItemStack(Material.SAND);
+	static ItemMeta psim = pocketSand.getItemMeta();
+	
 	//returns a players points in an int
 	public static int getPoints(Player player) {
 		
@@ -86,6 +92,25 @@ public class API {
 		return false;
 	}
 	
+	//returns if a player is on ppcooldown
+	public static boolean isPPCooldown(Player player){
+		if(BFreeze.ppCooldown.contains(getUUID(player))){
+			return true;
+		}
+		return false;	
+	}
+	
+	//adds a player to ppcooldown
+	public static void setPPCooldown(Player player){
+		BFreeze.ppCooldown.add(getUUID(player));
+	}
+	
+	public static void removePPCooldown(Player player){
+		if(BFreeze.ppCooldown.contains(getUUID(player))){
+			BFreeze.ppCooldown.remove(getUUID(player));
+		}
+	}
+	
 	//sets a player to "frozen"
 	public static void setFrozen(Player player){
 		BFreeze.frozen.add(getUUID(player));
@@ -143,14 +168,19 @@ public class API {
 
 	//freezes a player
 	public static void freezePlayer(Player player) {
+		psim.setDisplayName(ChatColor.GOLD + "Pocket Sand");
+		pocketSand.setItemMeta(psim);
+		
 		BFreeze.totalFrozen++;
 		BFreeze.totalUnfrozen--;
 		API.removeUnfrozen(player);
 		API.setFrozen(player);
-		player.setWalkSpeed(0);
 		player.getInventory().setHelmet(new ItemStack(Material.PACKED_ICE));
-		//player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 10, 0));
-		
+		if(!player.getInventory().contains(pocketSand)){
+			API.givePocketSand(player);
+		}
+		player.getWorld().playEffect(player.getLocation().add(0, 1, 0), Effect.STEP_SOUND, 174);
+        //player.getWorld().playSound(player.getLocation(), Sound.CREEPER_DEATH, 2, 3); 
 	}
 
 	//unfreezes a player
@@ -159,7 +189,35 @@ public class API {
 		BFreeze.totalUnfrozen++;
 		API.removeFrozen(player);
 		API.setUnfrozen(player);
-		player.setWalkSpeed(0.2f);
 		player.getInventory().setHelmet(new ItemStack(Material.AIR));
+		player.getWorld().playEffect(player.getLocation().add(0, 1, 0), Effect.STEP_SOUND, 174);
+		//player.getWorld().playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 2, -2);
+	}
+	
+	//gives the boost potion
+	public static void givePowerPotion(Player player){
+		ItemStack powerPot = new ItemStack(Material.POTION);
+		ItemMeta ppim = powerPot.getItemMeta();
+		ppim.setDisplayName(ChatColor.AQUA + "Power Potion");
+		powerPot.setItemMeta(ppim);
+		
+		player.getInventory().addItem(powerPot);
+		
+	}
+	
+	public static void givePocketSand(Player player){
+		ItemStack pocketSand = new ItemStack(Material.SAND);
+		ItemMeta psim = pocketSand.getItemMeta();
+		psim.setDisplayName(ChatColor.GOLD + "Pocket Sand");
+		pocketSand.setItemMeta(psim);
+		
+		player.getInventory().addItem(pocketSand);
+	}
+	
+	public static void giveTaggerArmor(Player player){
+		player.getInventory().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+		player.getInventory().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+		player.getInventory().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+		player.getInventory().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
 	}
 }
