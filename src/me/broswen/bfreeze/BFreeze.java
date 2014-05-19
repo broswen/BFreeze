@@ -10,6 +10,7 @@ import me.broswen.bfreeze.events.EntityDamage;
 import me.broswen.bfreeze.events.EntityDamageByEntity;
 import me.broswen.bfreeze.events.HungerChange;
 import me.broswen.bfreeze.events.InventoryClick;
+import me.broswen.bfreeze.events.OnCommand;
 import me.broswen.bfreeze.events.OnJoin;
 import me.broswen.bfreeze.events.PlayerDropItem;
 import me.broswen.bfreeze.events.PlayerInteract;
@@ -66,6 +67,7 @@ public class BFreeze extends JavaPlugin{
 		pm.registerEvents(new HungerChange(), this);
 		pm.registerEvents(new PlayerInteract(), this);
 		pm.registerEvents(new OnJoin(), this);
+		pm.registerEvents(new OnCommand(), this);
 		
 		this.getCommand("freeze").setExecutor(new FreezeCommand(this));
 		

@@ -41,6 +41,7 @@ public class PlayerQuit implements Listener{
 			
 			if(BFreeze.totalTagging <= 0 && BFreeze.gameStarted){
 				GameManager.endGame();
+				return;
 			}
 			
 			if(BFreeze.totalPlaying < BFreeze.config.getInt("min-players") && BFreeze.gameStarted){

@@ -13,13 +13,13 @@ public class GameManager {
 		BFreeze.gameStarted = true;
 		API.broadcastToPlayers("The Game Has Started!");
 		SpawnHandler.teleportToArena();
-		BFreeze.playerSpawn.getWorld().playSound(BFreeze.playerSpawn, Sound.LEVEL_UP, 2, 1);
+		API.playSoundToPlayers(Sound.LEVEL_UP);
 	}
 	
 	public static void endGame(){
 		
 		API.broadcastToPlayers("The Game Has Ended!");
-		BFreeze.playerSpawn.getWorld().playSound(BFreeze.playerSpawn, Sound.LEVEL_UP, 2, 1);
+		API.playSoundToPlayers(Sound.LEVEL_UP);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(BFreeze.plugin, new Runnable(){
 

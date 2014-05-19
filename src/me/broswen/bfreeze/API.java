@@ -10,6 +10,7 @@ import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -327,5 +328,13 @@ public class API {
 		BFreeze.totalTagging++;
 		API.broadcastToPlayers(player.getName() + " Is Now The Tagger! RUN!!!");
 		BFreeze.lastTagger = API.getName(player);
+	}
+	
+	public static void playSoundToPlayers(Sound sound){
+		for(Player p : Bukkit.getOnlinePlayers()){
+			if(isPlaying(p)){
+				p.playSound(p.getLocation(), sound, 1, 1);
+			}
+		}
 	}
 }

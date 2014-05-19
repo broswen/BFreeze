@@ -9,6 +9,9 @@ commands:
     description: the main command
     
 permissions:
+  bfreeze.admin:
+    description: allows you to use commands inside of a game
+    default: op
   bfreeze.info:
     description: developer command
     default: op
