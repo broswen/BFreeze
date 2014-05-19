@@ -4,6 +4,7 @@ import me.broswen.bfreeze.API;
 import me.broswen.bfreeze.BFreeze;
 import me.broswen.bfreeze.utils.GameManager;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -82,6 +83,7 @@ public class FreezeCommand implements CommandExecutor{
 				API.broadcastToPlayers(player.getName() + " Left The Game!");
 				API.teleportPlayer(player, BFreeze.lobbySpawn);
 				BFreeze.totalPlaying--;
+				API.resetPlayer(player);
 				
 				if(API.isTagger(player)){
 					BFreeze.totalTagging--;
@@ -161,7 +163,39 @@ public class FreezeCommand implements CommandExecutor{
 				return true;
 			}
 			
-			API.sendMessage(player, "Usage: /freeze 'join/leave/start/stop'");
+			if(args[0].equalsIgnoreCase("info")){
+				if(!sender.hasPermission("bfreeze.info")){
+					API.sendMessage(player, ChatColor.RED + "You don't have permission!");
+					return true;
+				}
+				
+				player.sendMessage("Version: " + BFreeze.plugin.getDescription().getVersion());
+				player.sendMessage("gameStarted: " + BFreeze.gameStarted);
+				player.sendMessage("gameEnded: " + BFreeze.gameEnded);
+				player.sendMessage("taggersStarted: " + BFreeze.taggersStarted);
+				player.sendMessage("totalUnfrozen: " + BFreeze.totalUnfrozen);
+				player.sendMessage("totalFrozen: " + BFreeze.totalFrozen);
+				player.sendMessage("totalPlaying: " + BFreeze.totalPlaying);
+				player.sendMessage("totalTagging: " + BFreeze.totalTagging);
+				player.sendMessage("lastTagger: " + BFreeze.lastTagger);
+				
+
+				player.sendMessage("isFrozen: " + API.isFrozen(player));
+				player.sendMessage("isPlaying: " + API.isPlaying(player));
+				player.sendMessage("isUnfrozen: " + API.isUnfrozen(player));
+				player.sendMessage("isTagger: " + API.isTagger(player));
+				
+				if(BFreeze.gameStarted){
+					player.sendMessage("points: " + API.getPoints(player));
+				}
+				
+			}
+			
+			if(args[0].equalsIgnoreCase("test")){
+				player.sendMessage(API.getRandomPlayer());
+			}
+			
+			API.sendMessage(player, "Usage: /freeze 'join/leave/start/stop/info'");
 		}
 		
 		return true;

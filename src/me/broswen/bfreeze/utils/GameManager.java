@@ -39,6 +39,8 @@ public class GameManager {
 				BFreeze.taggers.clear();
 				BFreeze.frozen.clear();
 				BFreeze.unfrozen.clear();
+				BFreeze.jbCooldown.clear();
+				BFreeze.ppCooldown.clear();
 			}
 			
 		}, 60L);

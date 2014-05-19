@@ -5,15 +5,13 @@ main: me.broswen.bfreeze.BFreeze
 description: a custom freeze tag plugin
 
 commands:
-  freezeinfo:
-    description: an info command
   freeze:
     description: the main command
     
 permissions:
-  bfreeze.freezeinfo:
-    description: allows you to use the developer info command
-    default: false
+  bfreeze.info:
+    description: developer command
+    default: op
   bfreeze.join:
     description: allows you to join games
     default: true

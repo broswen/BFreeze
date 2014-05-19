@@ -1,14 +1,19 @@
 package me.broswen.bfreeze;
 
+import java.util.Random;
+
+import me.broswen.bfreeze.utils.GameManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 
 public class API {
 
@@ -40,6 +45,11 @@ public class API {
 		return player.getUniqueId().toString();
 	}
 	
+	//returns a players name as a string
+	public static String getName(Player player){
+		return player.getName();
+	}
+	
 	//broadcasts a formatted message
 	public static void broadcastMessage(String message){
 		Bukkit.broadcastMessage(ChatColor.AQUA + "[" + ChatColor.DARK_AQUA + "BFreeze" + ChatColor.AQUA + "] " + ChatColor.RESET + message);
@@ -53,7 +63,7 @@ public class API {
 	//broadcasts to game members
 	public static void broadcastToPlayers(String message){
 		for(Player p : Bukkit.getOnlinePlayers()){
-			if(BFreeze.players.contains(getUUID(p))){
+			if(BFreeze.players.contains(getName(p))){
 				p.sendMessage(ChatColor.AQUA + "[" + ChatColor.DARK_AQUA + "BFreeze" + ChatColor.AQUA + "] " + ChatColor.RESET + message);
 			}
 		}
@@ -61,7 +71,7 @@ public class API {
 	
 	//returns if a player is frozen
 	public static boolean isFrozen(Player player){
-		if(BFreeze.frozen.contains(getUUID(player))){
+		if(BFreeze.frozen.contains(getName(player))){
 			return true;
 		}
 		return false;
@@ -70,7 +80,7 @@ public class API {
 	//returns if a player is playing
 	
 	public static boolean isPlaying(Player player){
-		if(BFreeze.players.contains(getUUID(player))){
+		if(BFreeze.players.contains(getName(player))){
 			return true;
 		}
 		return false;
@@ -78,7 +88,7 @@ public class API {
 	
 	//returns if a player is unfrozen
 	public static boolean isUnfrozen(Player player){
-		if(BFreeze.unfrozen.contains(getUUID(player))){
+		if(BFreeze.unfrozen.contains(getName(player))){
 			return true;
 		}
 		return false;
@@ -86,7 +96,7 @@ public class API {
 	
 	//returns if a player is a tagger
 	public static boolean isTagger(Player player){
-		if(BFreeze.taggers.contains(getUUID(player))){
+		if(BFreeze.taggers.contains(getName(player))){
 			return true;
 		}
 		return false;
@@ -94,7 +104,7 @@ public class API {
 	
 	//returns if a player is on ppcooldown
 	public static boolean isPPCooldown(Player player){
-		if(BFreeze.ppCooldown.contains(getUUID(player))){
+		if(BFreeze.ppCooldown.contains(getName(player))){
 			return true;
 		}
 		return false;	
@@ -102,56 +112,75 @@ public class API {
 	
 	//adds a player to ppcooldown
 	public static void setPPCooldown(Player player){
-		BFreeze.ppCooldown.add(getUUID(player));
+		BFreeze.ppCooldown.add(getName(player));
 	}
 	
 	public static void removePPCooldown(Player player){
-		if(BFreeze.ppCooldown.contains(getUUID(player))){
-			BFreeze.ppCooldown.remove(getUUID(player));
+		if(BFreeze.ppCooldown.contains(getName(player))){
+			BFreeze.ppCooldown.remove(getName(player));
 		}
 	}
 	
+	//returns if a player is on jbCooldown
+		public static boolean isJBCooldown(Player player){
+			if(BFreeze.jbCooldown.contains(getName(player))){
+				return true;
+			}
+			return false;	
+		}
+		
+		//adds a player to jbCooldown
+		public static void setJBCooldown(Player player){
+			BFreeze.jbCooldown.add(getName(player));
+		}
+		
+		public static void removeJBCooldown(Player player){
+			if(BFreeze.jbCooldown.contains(getName(player))){
+				BFreeze.jbCooldown.remove(getName(player));
+			}
+		}
+	
 	//sets a player to "frozen"
 	public static void setFrozen(Player player){
-		BFreeze.frozen.add(getUUID(player));
+		BFreeze.frozen.add(getName(player));
 	}
 	
 	public static void removeFrozen(Player player){
-		if(BFreeze.frozen.contains(getUUID(player))){
-			BFreeze.frozen.remove(getUUID(player));
+		if(BFreeze.frozen.contains(getName(player))){
+			BFreeze.frozen.remove(getName(player));
 		}
 	}
 	
 	//sets a player to "unfrozen"
 	public static void setUnfrozen(Player player){
-		BFreeze.unfrozen.add(getUUID(player));
+		BFreeze.unfrozen.add(getName(player));
 	}
 	
 	public static void removeUnfrozen(Player player){
-		if(BFreeze.unfrozen.contains(getUUID(player))){
-			BFreeze.unfrozen.remove(getUUID(player));
+		if(BFreeze.unfrozen.contains(getName(player))){
+			BFreeze.unfrozen.remove(getName(player));
 		}
 	}
 	
 	//sets a player to "players"
 	public static void setPlaying(Player player){
-		BFreeze.players.add(getUUID(player));
+		BFreeze.players.add(getName(player));
 	}
 	
 	public static void removePlaying(Player player){
-		if(BFreeze.players.contains(getUUID(player))){
-			BFreeze.players.remove(getUUID(player));
+		if(BFreeze.players.contains(getName(player))){
+			BFreeze.players.remove(getName(player));
 		}
 	}
 	
 	//sets a player to "taggers"
 	public static void setTagging(Player player){
-		BFreeze.taggers.add(getUUID(player));
+		BFreeze.taggers.add(getName(player));
 	}
 	
 	public static void removeTagging(Player player){
-		if(BFreeze.taggers.contains(getUUID(player))){
-			BFreeze.taggers.remove(getUUID(player));
+		if(BFreeze.taggers.contains(getName(player))){
+			BFreeze.taggers.remove(getName(player));
 		}
 	}
 	
@@ -194,6 +223,14 @@ public class API {
 		//player.getWorld().playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 2, -2);
 	}
 	
+	//resets various player stuff
+	public static void resetPlayer(Player player){
+		player.setGameMode(GameMode.SURVIVAL);
+		player.setFoodLevel(20);
+		player.getInventory().clear();
+		player.getInventory().setArmorContents(null);
+	}
+	
 	//gives the boost potion
 	public static void givePowerPotion(Player player){
 		ItemStack powerPot = new ItemStack(Material.POTION);
@@ -214,10 +251,81 @@ public class API {
 		player.getInventory().addItem(pocketSand);
 	}
 	
+	public static void giveInvisBottle(Player player){
+		ItemStack invisBottle = new ItemStack(Material.GLASS_BOTTLE);
+		ItemMeta ibim = invisBottle.getItemMeta();
+		ibim.setDisplayName(ChatColor.AQUA + "Invisibility Liquid");
+		invisBottle.setItemMeta(ibim);
+		
+		player.getInventory().addItem(invisBottle);
+	}
+	
+	public static void giveJumpBoots(Player player){
+		ItemStack jumpBoots = new ItemStack(Material.IRON_BOOTS);
+		ItemMeta jbim = jumpBoots.getItemMeta();
+		jbim.setDisplayName(ChatColor.RED + "Air Jordans");
+		jumpBoots.setItemMeta(jbim);
+		
+		player.getInventory().addItem(jumpBoots);
+	}
+	
 	public static void giveTaggerArmor(Player player){
 		player.getInventory().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 		player.getInventory().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
 		player.getInventory().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
 		player.getInventory().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+	}
+	
+	//returns if everyone is frozen
+	public static boolean hasTaggerWon(){
+		if(BFreeze.totalUnfrozen <= 0){
+			return true;
+		}
+		return false;
+	}
+	
+	//displays that the tagger won
+	public static void taggerWin(Player player){
+		 API.broadcastToPlayers(player.getName() + " Has Frozen Everyone!");
+		 GameManager.endGame();
+	}
+	
+	public static Player getPlayerPlaying(int i){
+		Player player = Bukkit.getServer().getPlayer(BFreeze.players.get(i));
+		
+		return player;
+	}
+	
+	public static void resetPotions(Player player){
+		for (PotionEffect effect : player.getActivePotionEffects()){
+			player.removePotionEffect(effect.getType());
+		}
+	}
+	
+	public static String getRandomPlayer(){
+		int random = new Random().nextInt(BFreeze.players.size());
+		String name = BFreeze.players.get(random);
+		
+		return name;
+	}
+	
+	public static void chooseRandomTagger(){
+		Player player = Bukkit.getPlayer(getRandomPlayer());
+		
+		if(player == null){
+			return;
+		}
+		
+		while(BFreeze.lastTagger == player.getName()){
+			player = Bukkit.getPlayer(getRandomPlayer());
+		}
+		
+		API.setTagging(player);
+		API.removeUnfrozen(player);
+		API.resetPotions(player);
+		BFreeze.totalUnfrozen--;
+		BFreeze.totalTagging++;
+		API.broadcastToPlayers(player.getName() + " Is Now The Tagger! RUN!!!");
+		BFreeze.lastTagger = API.getName(player);
 	}
 }
