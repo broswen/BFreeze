@@ -21,3 +21,4 @@ tagger-delay: 10
 power-potion-delay: 20
 jump-boots-delay: 40
 join-on-join: false
+time-until-win: 600
